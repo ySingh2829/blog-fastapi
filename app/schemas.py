@@ -2,22 +2,6 @@ from typing import Optional
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
-# Declaring a schema
-class PostBase(BaseModel):
-    title: str
-    content: str
-    published: bool = True
-
-class PostCreate(PostBase):
-    pass
-
-class Post(PostBase):
-    id: str
-    created_at: datetime
-
-    class Config:
-        orm_mode = True
-
 # Schemas for User
 class UserCreate(BaseModel):
     email: EmailStr
@@ -30,6 +14,26 @@ class UserOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+# Schema for Post
+class PostBase(BaseModel):
+    title: str
+    content: str
+    published: bool = True
+
+class PostCreate(PostBase):
+    pass
+
+class Post(PostBase):
+    id: str
+    created_at: datetime
+    owner_id: int
+    owner: UserOut
+
+    class Config:
+        orm_mode = True
+
 
 # Schemas for login
 class UserLogin(BaseModel):
