@@ -1,6 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
+from enum import IntEnum
 
 # Schemas for User
 class UserCreate(BaseModel):
@@ -34,6 +35,10 @@ class Post(PostBase):
     class Config:
         orm_mode = True
 
+class PostOut(BaseModel):
+    Post: Post
+    total_votes: int
+
 
 # Schemas for login
 class UserLogin(BaseModel):
@@ -46,3 +51,13 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     id: Optional[str]
+
+
+# Schemacs for vote
+class Like(IntEnum):
+    remove = 0
+    give = 1
+
+class Vote(BaseModel):
+    post_id: int
+    dir: Like = Like.remove
