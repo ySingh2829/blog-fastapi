@@ -1,10 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .routers import post, user, auth, vote
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, RedirectResponse
 
 app = FastAPI()
 
 origins = ["*"]
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
@@ -20,6 +24,6 @@ app.include_router(auth.router)
 app.include_router(vote.router)
 
 # Root
-@app.get("/")
+@app.get("/", include_in_schema=False)
 def root():
-    return {"message": "Hello, from api"}
+    return RedirectResponse(url="/static/index.html")
